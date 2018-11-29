@@ -5,6 +5,9 @@
  */
 package com.firnanda.quiz1;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  *
  * @author Firnanda(Rizka)
@@ -168,6 +171,15 @@ public class Menu extends javax.swing.JFrame {
         ComboBoxItem.setEnabled(true);
         ItemText.setEnabled(true);
         NewButton.setEnabled(false);
+        
+        int i = 0;
+        i++;
+        
+        Date d = new Date();
+        SimpleDateFormat SDFormat = new SimpleDateFormat("yyMMdd");
+        String dateString = SDFormat.format(d);
+        
+        CodeText.setText(dateString + "0" + i);
     }//GEN-LAST:event_NewButtonActionPerformed
 
     private void SaveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SaveButtonActionPerformed
