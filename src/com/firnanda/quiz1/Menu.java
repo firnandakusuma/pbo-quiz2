@@ -16,6 +16,16 @@ public class Menu extends javax.swing.JFrame {
      */
     public Menu() {
         initComponents();
+        
+        CodeText.setEnabled(false);
+        AddButton.setEnabled(false);
+        RemoveButton.setEnabled(false);
+        ComboBoxItem.setEnabled(false);
+        SaveButton.setEnabled(false);
+        CancelButton.setEnabled(false);
+        ItemText.setEnabled(false);
+        TableNama.setEnabled(false);
+        
     }
 
     /**
@@ -46,7 +56,17 @@ public class Menu extends javax.swing.JFrame {
 
         ItemLabel.setText("Items");
 
-        ComboBoxItem.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        CodeText.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CodeTextActionPerformed(evt);
+            }
+        });
+
+        ItemText.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ItemTextActionPerformed(evt);
+            }
+        });
 
         NewButton.setText("New");
         NewButton.addActionListener(new java.awt.event.ActionListener() {
@@ -140,11 +160,27 @@ public class Menu extends javax.swing.JFrame {
 
     private void NewButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NewButtonActionPerformed
         // TODO add your handling code here:
+        
+        AddButton.setEnabled(true);
+        CancelButton.setEnabled(true);
+        RemoveButton.setEnabled(true);
+        SaveButton.setEnabled(true);
+        ComboBoxItem.setEnabled(true);
+        ItemText.setEnabled(true);
+        NewButton.setEnabled(false);
     }//GEN-LAST:event_NewButtonActionPerformed
 
     private void SaveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SaveButtonActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_SaveButtonActionPerformed
+
+    private void ItemTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ItemTextActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ItemTextActionPerformed
+
+    private void CodeTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CodeTextActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_CodeTextActionPerformed
 
     /**
      * @param args the command line arguments
