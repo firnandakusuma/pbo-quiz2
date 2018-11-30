@@ -26,13 +26,13 @@ public class Transaksi {
     
     public String Pembayaran(){
         setTotal();
-        String obt = "";
-        obt += "Kode\t\t : " + this.kode + "\n";
-        obt += "Daftar Belanja : \n";
+        String ob = "";
+        ob += "Kode\t\t : " + this.kode + "\n";
+        ob += "Daftar Belanja : \n";
         for(Item item : this.items){
-            obt += "\t" + item.getNama() + "(" + item.getJumlah() + ") : " + item.getTotal() + "\n";
+            ob += "\t" + item.getNama() + "(" + item.getJumlah() + ") : " + item.getTotal() + "\n";
         }
-        obt += "Total\t\t : " + this.total;
-        return obt;
+        ob += "Total\t\t : " + this.total;
+        return ob;
     }
 }
