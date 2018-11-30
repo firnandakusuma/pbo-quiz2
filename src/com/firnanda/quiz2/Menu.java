@@ -6,19 +6,32 @@
 package com.firnanda.quiz2;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author Firnanda(Rizka)
  */
 public class Menu extends javax.swing.JFrame {
-
+    private int id = 0;
+    private String kode;
+    private DefaultTableModel DtModel;
+    private DefaultComboBoxModel DcModel;
+    private ArrayList<Item> t = new ArrayList<>();
     /**
      * Creates new form Menu
      */
     public Menu() {
         initComponents();
+        
+        NewBarang newbarang = new NewBarang();
+        this.DcModel = new DefaultComboBoxModel<>(newbarang.getJenisNama().toArray());
+        TableTransaksi tableModel = new TableTransaksi();
+        this.DtModel = new DefaultTableModel(tableModel.getKolomNama(), 0);
         
         CodeText.setEnabled(false);
         AddButton.setEnabled(false);
@@ -30,7 +43,87 @@ public class Menu extends javax.swing.JFrame {
         TableNama.setEnabled(false);
         
     }
-
+    
+    private void incId(){
+        this.id += 1;
+    }
+    
+    private void decId(){
+        this.id -= 1;
+    }
+    
+    private Object[] addItem(String nama, int jumlah){
+        float harga = 0;
+        NewBarang items = new NewBarang();
+        for(int i = 0 ; i < items.getHargaBarang().size(); i++){            
+            if(nama.equalsIgnoreCase(items.getJenisNama().get(i))){
+            harga = items.getHargaBarang().get(i);
+            }
+        }
+        
+        Object[] ob = {
+            nama,
+            harga,
+            jumlah
+        };
+        return ob;
+    }
+    
+    private void updateJumlah(String nama, int add){
+        ArrayList<String> item = new ArrayList<>();
+        for(int i = 0; i < DtModel.getRowCount(); i++){
+            item.add(DtModel.getValueAt(i, 0).toString());
+        }
+        for(int i = 0; i < item.size(); i++){
+            if(item.get(i).equals(nama)){
+                int jumlah = new Integer (DtModel.getValueAt(i, 2).toString());
+                DtModel.setValueAt(jumlah + add, i, 2);
+            }
+        }
+    }
+    
+        private boolean Duplicate(String nama){
+            boolean result = false;
+            ArrayList<String> item = new ArrayList<>();
+            for(int i = 0; i < DtModel.getRowCount(); i++){
+                item.add(DtModel.getValueAt(i, 0).toString());
+            }
+            for(String i : item){
+                if(i.equals (nama)){
+                    result = true;
+                }
+            }
+            return result;
+        }
+        
+        boolean isEmpty(){
+            return this.TableNama.getModel().getRowCount() <= 0;
+        }
+        
+        private void belanja(){
+            if(isEmpty()){
+                this.SaveButton.setEnabled(false);
+                this.RemoveButton.setEnabled(false);
+            }else{
+                this.SaveButton.setEnabled(true);
+                this.RemoveButton.setEnabled(true);
+            }
+        }
+        
+        private void newTransaksi(){
+            this.ItemText.setText("");
+            this.CodeText.setText("");
+            this.NewButton.setEnabled(true);
+            this.SaveButton.setEnabled(false);
+            this.CancelButton.setEnabled(false);
+            this.AddButton.setEnabled(false);
+            this.RemoveButton.setEnabled(false);
+            this.ItemText.setEnabled(false);
+            this.ComboBoxItem.setEnabled(false);
+            this.DtModel.setRowCount(0);
+            this.t.clear();
+        }
+        
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -79,6 +172,11 @@ public class Menu extends javax.swing.JFrame {
         });
 
         AddButton.setText("Add");
+        AddButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AddButtonActionPerformed(evt);
+            }
+        });
 
         TableNama.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -98,8 +196,18 @@ public class Menu extends javax.swing.JFrame {
         });
 
         CancelButton.setText("Cancel");
+        CancelButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CancelButtonActionPerformed(evt);
+            }
+        });
 
         RemoveButton.setText("Remove");
+        RemoveButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                RemoveButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -184,6 +292,21 @@ public class Menu extends javax.swing.JFrame {
 
     private void SaveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SaveButtonActionPerformed
         // TODO add your handling code here:
+        try{
+            for(int i = 0; i < DtModel.getColumnCount(); i++){
+                String nama = DtModel.getValueAt(i, 0).toString();
+                float harga = new Float(DtModel.getValueAt(i, 1).toString());
+                int jumlah = new Integer(DtModel.getValueAt(i, 2).toString());
+                this.t.add(new Item(nama, harga, jumlah));
+            }
+            Transaksi transaksi = new Transaksi(this.kode, this.t);
+            StringBuilder sbr = new StringBuilder();
+            sbr.append(transaksi.Pembayaran());
+            JOptionPane.showMessageDialog(this, sbr, "Transaksi", JOptionPane.INFORMATION_MESSAGE);
+            newTransaksi();
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
     }//GEN-LAST:event_SaveButtonActionPerformed
 
     private void ItemTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ItemTextActionPerformed
@@ -193,6 +316,28 @@ public class Menu extends javax.swing.JFrame {
     private void CodeTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CodeTextActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_CodeTextActionPerformed
+
+    private void AddButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddButtonActionPerformed
+        // TODO add your handling code here:
+        String nama = this.ComboBoxItem.getSelectedItem().toString();
+        int jumlah = new Integer(this.ItemText.getText());
+        if(Duplicate(nama)){
+            updateJumlah(nama, jumlah);
+        }else{
+            DtModel.addRow(addItem(nama, jumlah));
+        }
+        this.belanja();
+    }//GEN-LAST:event_AddButtonActionPerformed
+
+    private void CancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelButtonActionPerformed
+        // TODO add your handling code here:
+        newTransaksi();
+        this.decId();
+    }//GEN-LAST:event_CancelButtonActionPerformed
+
+    private void RemoveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RemoveButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_RemoveButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -226,7 +371,8 @@ public class Menu extends javax.swing.JFrame {
             public void run() {
                 new Menu().setVisible(true);
             }
-        });
+        }
+        );
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

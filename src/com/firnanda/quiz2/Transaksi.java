@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Transaksi {
     private final String kode;
-    private ArrayList<Item> items = new ArrayList();
+    private ArrayList<Item> t = new ArrayList();
     private float total;
 
     public Transaksi(String kode) {
@@ -18,7 +18,7 @@ public class Transaksi {
     
     public void setTotal(){
         float total = 0;
-        for(Item item : this.items){
+        for(Item item : this.t){
             total += item.getTotal();
         }
         this.total = total;
@@ -29,7 +29,7 @@ public class Transaksi {
         String ob = "";
         ob += "Kode\t\t : " + this.kode + "\n";
         ob += "Daftar Belanja : \n";
-        for(Item item : this.items){
+        for(Item item : this.t){
             ob += "\t" + item.getNama() + "(" + item.getJumlah() + ") : " + item.getTotal() + "\n";
         }
         ob += "Total\t\t : " + this.total;

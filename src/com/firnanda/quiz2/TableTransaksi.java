@@ -11,7 +11,7 @@ public class TableTransaksi extends DefaultTableModel{
         };
     }
 
-    public String[] getKolom() {
+    public String[] getKolomNama() {
         return kolom;
     }
     
